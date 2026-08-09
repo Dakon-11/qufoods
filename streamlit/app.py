@@ -89,7 +89,7 @@ st.set_page_config(
 )
 
 # Sidebar
-st.sidebar.image("Q-removebg-preview (1).png", width=180)
+st.sidebar.image("qufoods_logo.png", width=180)
 st.sidebar.title(" REPORTS")
 st.sidebar.markdown("---")
 
