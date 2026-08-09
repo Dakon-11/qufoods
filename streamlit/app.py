@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 import plotly.express as px
 from pdf import generate_branch_pdf, generate_regional_pdf, generate_operations_pdf
 from bedrock import generate_narrative, build_branch_prompt, build_regional_prompt, build_operations_prompt
@@ -89,7 +90,9 @@ st.set_page_config(
 )
 
 # Sidebar
-st.sidebar.image("qufoods_logo.png", width=180)
+logo_path = Path(__file__).parent / "qufoods_logo.png"
+st.sidebar.image(str(logo_path), width=180)
+
 st.sidebar.title(" REPORTS")
 st.sidebar.markdown("---")
 
