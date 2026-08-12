@@ -171,11 +171,18 @@ def run_pipeline(sales: pd.DataFrame, expenses: pd.DataFrame):
         load_menu_items(session, menu_df)
 
         # Transactions
+        from datetime import datetime
+        start = datetime.now()
         load_sales(session, sales)
+        print("Finished loading into sales. Time taken:", datetime.now() - start)
 
+        start = datetime.now()
         load_sales_items(session, sales)
+        print("Finished loading into sales item. Time taken:", datetime.now() - start)
 
+        start = datetime.now()
         load_expenses(session, expenses)
+        print("Finished loading into expenses. Time taken:", datetime.now() - start)
 
         session.commit()
 

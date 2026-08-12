@@ -205,6 +205,10 @@ def run(
 
     # Save cleaned CSVs automatically
     if save:
+        import json
+        data = sales_df.astype(object).where(sales_df.notna(), None).to_dict()
+        m = json.dumps(data, indent=2)
+        print(m)
         # save_outputs(sales_df, expense_df)
         upload_cleaned_data(sales_df, expense_df, ingest_result.source_keys)
         run_pipeline(sales_df, expense_df)
