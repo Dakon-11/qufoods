@@ -1,17 +1,20 @@
 import streamlit as st
+import psycopg2
 from pathlib import Path
 import plotly.express as px
 from pdf import generate_branch_pdf, generate_regional_pdf, generate_operations_pdf
 from bedrock import generate_narrative, build_branch_prompt, build_regional_prompt, build_operations_prompt
+from db import get_sales, get_expenses
 from queries import (
-    get_sales, get_expenses, revenue_by_branch,
-    total_revenue, average_order_value, failed_transaction_count,
+    revenue_by_branch, total_revenue, average_order_value, failed_transaction_count,
     payment_method_split, top_ordered_items,
     regional_revenue, revenue_vs_expenses, membership_penetration, 
     top_and_bottom_branch, top_5_branches, bottom_5_branches, 
     network_transaction_status, total_expenses_network,
     revenue_by_region, imputation_summary, filter_by_period
 )
+# from db import check_schema
+# check_schema()
 
 # This codeblock controls the chart rendering and the color scheme of the charts
 
@@ -250,8 +253,9 @@ if report_type == "Branch Report":
 
     with col_right:
         # Top ordered items — green shades
-        items = top_ordered_items(sales).reset_index()
-        items.columns = ["Item", "Count"]
+        items = top_ordered_items(sales)
+        items = items.rename(columns={"item_name": "Item", "total_quantity": "Count"})
+        items = items[["Item", "Count"]]
         render_chart(
             items, "Item", "Count",
             "Top Ordered Items",
