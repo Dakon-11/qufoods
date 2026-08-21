@@ -3,24 +3,21 @@ import pandas as pd
 from datetime import datetime, timedelta, timezone
 
 def filter_by_period(sales, period):
-    # Filters the sales dataframe to only include records
-    # within the selected time window
-    # Uses customer_arrival_time as the transaction date
-    
     if period == "All":
-        # No filter — return everything
         return sales
 
-    # Convert arrival time to datetime if it isn't already
     sales = sales.copy()
+
+    # Timestamps from PostgreSQL come in ISO8601 format e.g. "2026-08-12T18:42:34Z"
+    # format='ISO8601' tells pandas to handle this format correctly
     sales["customer_arrival_time"] = pd.to_datetime(
-        sales["customer_arrival_time"], utc=True
+        sales["customer_arrival_time"],
+        format="ISO8601",
+        utc=True
     )
 
-    # Get current time in UTC
     now = datetime.now(timezone.utc)
 
-    # Calculate the cutoff date based on selected period
     if period == "Today":
         cutoff = now.replace(hour=0, minute=0, second=0, microsecond=0)
     elif period == "1W":
@@ -30,7 +27,6 @@ def filter_by_period(sales, period):
     elif period == "3M":
         cutoff = now - timedelta(days=90)
 
-    # Return only records on or after the cutoff
     return sales[sales["customer_arrival_time"] >= cutoff]
 
 # def get_sales():
