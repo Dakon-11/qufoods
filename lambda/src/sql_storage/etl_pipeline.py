@@ -150,6 +150,11 @@ def load_menu_items(session, menu_df):
 def run_pipeline(sales: pd.DataFrame, expenses: pd.DataFrame):
     print("Starting ETL Pipeline...")
 
+    if len(sales) == 0 and len(expenses) == 0:
+        print("Data truncated!")
+        exit(0)
+
+
     logger.info("=" * 60)
     logger.info("Starting ETL Pipeline")
     logger.info("=" * 60)
@@ -173,6 +178,7 @@ def run_pipeline(sales: pd.DataFrame, expenses: pd.DataFrame):
         # Transactions
         from datetime import datetime
         start = datetime.now()
+
         load_sales(session, sales)
         print("Finished loading into sales. Time taken:", datetime.now() - start)
 
@@ -253,7 +259,7 @@ def load_sales(session, sales_df):
 
         )
 
-        ON CONFLICT (transaction_id)
+        ON CONFLICT (record_id)
 
         DO UPDATE SET
 
@@ -268,6 +274,7 @@ def load_sales(session, sales_df):
     """)
 
     for _, row in sales_df.iterrows():
+
         session.execute(
             query,
             {
@@ -392,7 +399,6 @@ def load_sales_items(session, sales_df):
                 )
 
                 continue
-
             session.execute(
                 query,
                 {

@@ -202,8 +202,9 @@ def pull_from_local(sample_dir: str | Path) -> IngestResult:
     """
     from . import s3
 
+    previous_hour = datetime.now(timezone.utc) - timedelta(hours=1)
     BUCKET_NAME = "qufoods-raw"
-    TARGET_TIME = datetime(2026, 8, 12, 13, 00, tzinfo=timezone.utc)
+    # TARGET_TIME = datetime(2026, 9, 24, 12, 30, tzinfo=timezone.utc)
 
     paginator = s3.get_paginator("list_objects_v2")
 
@@ -215,7 +216,7 @@ def pull_from_local(sample_dir: str | Path) -> IngestResult:
         records: list[dict] = []
         paths: list[str] = []
         for obj in page["Contents"]:
-            if obj["LastModified"] >= TARGET_TIME:
+            if obj["LastModified"] >= previous_hour:
                 key = obj["Key"]
                 paths.append("https://qufoods-raw.s3.amazonaws.com/"+key)
                 response = s3.get_object(Bucket=BUCKET_NAME, Key=key)
