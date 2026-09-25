@@ -166,8 +166,8 @@ def run(
     if len(raw_df) == 0:
         print("No new data!")
         exit(0)
-    else:
-        raw_df.to_csv("raw_df.csv")
+    # else:
+        # raw_df.to_csv("raw_df.csv")
 
     sales_df, expense_df = split_record_types(raw_df)
 
