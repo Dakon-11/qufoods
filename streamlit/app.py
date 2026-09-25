@@ -90,7 +90,7 @@ st.set_page_config(
 
 # Sidebar
 st.sidebar.image("Q-removebg-preview (1).png", width=180)
-st.sidebar.title(" REPORTS")
+st.sidebar.titxle(" REPORTS")
 st.sidebar.markdown("---")
 
 # Report type selector

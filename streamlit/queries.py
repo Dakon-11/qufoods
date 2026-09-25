@@ -1,6 +1,9 @@
 import pandas as pd
-from db import get_data
+from db import get_data, get_db_expenses, get_db_sales
 from datetime import datetime, timedelta, timezone
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def filter_by_period(sales, period):
     # Filters the sales dataframe to only include records
@@ -34,13 +37,16 @@ def filter_by_period(sales, period):
     return sales[sales["customer_arrival_time"] >= cutoff]
 
 def get_sales():
-    df = get_data()
-    sales = df[df["record_type"] == "SALE"].reset_index(drop=True)
+    # df = get_data()
+    # sales = df[df["record_type"] == "SALE"].reset_index(drop=True)
+    sales = get_db_sales()
+    print("kolo:", sales)
     return sales
 
 def get_expenses():
-    df = get_data()
-    expenses = df[df["record_type"] == "EXPENSE"].reset_index(drop=True)
+    # df = get_data()
+    # expenses = df[df["record_type"] == "EXPENSE"].reset_index(drop=True)
+    expenses = get_db_expenses()
     return expenses
 
 def revenue_by_branch(sales):

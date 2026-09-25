@@ -1,44 +1,45 @@
-# import psycopg2
-# import pandas as pd
+import os
+import psycopg2
 
 # # Neon PostgreSQL connection string — get this from Bukolami
 # # Format: postgresql://user:password@host/dbname?sslmode=require
 # CONNECTION_STRING = "YOUR_NEON_CONNECTION_STRING_HERE"
+CONNECTION_STRING = os.getenv('DATABASE_URL')
 
-# def get_sales():
-#     conn = psycopg2.connect(CONNECTION_STRING)
-#     query = """
-#         SELECT 
-#             s.record_id, s.transaction_id, s.batch_id,
-#             s.branch_id, b.branch_name, b.branch_manager, b.region,
-#             s.membership_id, s.order_channel, s.order_source,
-#             s.order_subtotal, s.discount_applied, s.total_amount,
-#             s.payment_method, s.transaction_status,
-#             s.customer_arrival_time, s.customer_departure_time,
-#             s.ingested_at, s.order_items_typo_fixed,
-#             s.total_amount_imputed, s.imputation_method
-#         FROM sales s
-#         JOIN branches b ON s.branch_id = b.branch_id
-#     """
-#     df = pd.read_sql(query, conn)
-#     conn.close()
-#     return df
+def get_db_sales():
+    conn = psycopg2.connect(CONNECTION_STRING)
+    query = """
+        SELECT 
+            s.record_id, s.transaction_id, s.batch_id,
+            s.branch_id, b.branch_name, b.branch_manager, b.region,
+            s.membership_id, s.order_channel, s.order_source,
+            s.order_subtotal, s.discount_applied, s.total_amount,
+            s.payment_method, s.transaction_status,
+            s.customer_arrival_time, s.customer_departure_time,
+            s.ingested_at, s.order_items_typo_fixed,
+            s.total_amount_imputed, s.imputation_method
+        FROM sales s
+        JOIN branches b ON s.branch_id = b.branch_id
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
 
-# def get_expenses():
-#     conn = psycopg2.connect(CONNECTION_STRING)
-#     query = """
-#         SELECT 
-#             e.record_id, e.batch_id, e.branch_id,
-#             b.branch_name, b.region,
-#             e.expense_category, e.amount, e.currency,
-#             e.raised_by, e.approved_by, e.paid_by,
-#             e.approval_status, e.expense_date, e.ingested_at
-#         FROM expenses e
-#         JOIN branches b ON e.branch_id = b.branch_id
-#     """
-#     df = pd.read_sql(query, conn)
-#     conn.close()
-#     return df
+def get_db_expenses():
+    conn = psycopg2.connect(CONNECTION_STRING)
+    query = """
+        SELECT 
+            e.record_id, e.batch_id, e.branch_id,
+            b.branch_name, b.region,
+            e.expense_category, e.amount, e.currency,
+            e.raised_by, e.approved_by, e.paid_by,
+            e.approval_status, e.expense_date, e.ingested_at
+        FROM expenses e
+        JOIN branches b ON e.branch_id = b.branch_id
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
 
 # def get_top_items(branch_id=None, limit=8):
 #     # Uses sales_items table — do NOT parse order_items string
