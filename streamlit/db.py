@@ -1,11 +1,13 @@
 import psycopg2
 import pandas as pd
 import os
+from dotenv import load_dotenv
 # import streamlit as st
 
 # Neon PostgreSQL connection string — get this from Bukolami
 # Format: postgresql://user:password@host/dbname?sslmode=require
 # CONNECTION_STRING = st.secrets["database"]["url"]
+load_dotenv()
 CONNECTION_STRING = os.getenv('DATABASE_URL')
 
 def get_sales():
