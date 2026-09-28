@@ -1,10 +1,12 @@
 import psycopg2
 import pandas as pd
-import streamlit as st
+import os
+# import streamlit as st
 
 # Neon PostgreSQL connection string — get this from Bukolami
 # Format: postgresql://user:password@host/dbname?sslmode=require
-CONNECTION_STRING = st.secrets["database"]["url"]
+# CONNECTION_STRING = st.secrets["database"]["url"]
+CONNECTION_STRING = os.getenv('DATABASE_URL')
 
 def get_sales():
     conn = psycopg2.connect(CONNECTION_STRING)
